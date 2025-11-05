@@ -42,7 +42,7 @@ class load_web_text:
 
                 # adding to list
                 ids.append(str(id))
-                page_urls.append(url)
+                page_urls.append({"url": url})
                 page_content.append(url_title)
 
                 # doc = Document(ids=id, page_content=url_title, metadata={"url": url})
@@ -54,5 +54,25 @@ class load_web_text:
                 # documents.append(doc)
 
         documents = {"ids": ids, "documents": page_content, "metadatas": page_urls}
+
+        return documents
+
+    def load_web_content(self,url):
+        """Fetch page wise data from web
+
+        Args:
+          web_url: url to the website
+        """
+
+        try:
+            data = requests.get(url).text
+            print(f"[DEBUG]: Loaded web content from {url}")
+
+        except Exception as e:
+            print(f"[ERROR]: Failed to load {url}: Found {e}")
+
+        documents = []
+        doc = Document(page_content=data, metadata={"url": url})
+        documents.append(doc)
 
         return documents

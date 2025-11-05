@@ -2,6 +2,7 @@ from typing import List, Any
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
 import src.load_data as data_loader
+import uuid
 
 
 class Embedding:
@@ -25,7 +26,7 @@ class Embedding:
         except Exception as e:
             print(f"[ERROR]: Failed to load embedding model{e}")
 
-    def chunk_document(self, document: List[Any],chunk_size:int=1000, chunk_overlap:int = 200):
+    def chunk_document(self, document,chunk_size:int=1000, chunk_overlap:int = 200):
         """This will split documet to chunks
         Args:
           document:
@@ -37,10 +38,24 @@ class Embedding:
             separators=["\n\n","\n"," ",""],
         )
 
-        doc_chunks  = text_splitter.split_documents(document)
-        print(f"[DEBUG]: Split {len(document)} into {len(doc_chunks)}")
+        # print("[DEBUG]:TYPE OF DOC",  type(document))
 
-        return doc_chunks
+        doc_chunks = text_splitter.split_documents(document)
+        print(f"[DEBUG]: Split document into {len(doc_chunks)}")
+
+        documents = []
+        metadatas = []
+        ids = []
+        # print(doc_chunks)
+        for i,doc in enumerate(doc_chunks):
+            ids.append(f"doc_{uuid.uuid4().hex[:8]}_{i}")
+            metadatas.append(doc.metadata)
+            documents.append(doc.page_content)
+
+        data = {"ids": ids, "documents": documents, "metadatas": metadatas}
+
+        print("[DEBUG]: Completed chunking") 
+        return data
 
     def embedd_text(self,document_text:List[str]):
         """This will embedd the document chunk
