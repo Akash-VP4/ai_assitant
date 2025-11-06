@@ -3,7 +3,7 @@ import chromadb
 from typing import List, Any
 import numpy as np
 from src.embedd import Embedding
-from src.add_doc import add_document
+from src.db_ops import DB_OPERATIONS
 
 
 class ChromaVectorStore:
@@ -42,6 +42,22 @@ class ChromaVectorStore:
             print(f"[DEBUG]: Failed to load store")
 
         return collection
+
+    def add_main_content(self, document: list[Any], embeddings: np.array):
+        """This will add main document
+        Args:
+            document:
+            embeddings:
+        """
+        DB_OPERATIONS.add_document(document, embeddings, self.collection_main)
+
+    def add_page_content(self, document: list[Any], embeddings: np.array):
+        """This will add main document
+        Args:
+            document:
+            embeddings:
+        """
+        DB_OPERATIONS.add_document(document, embeddings, self.collection_page)
 
     def add_main_content(self, document: list[Any], embeddings: np.array):
         """This will add main document
