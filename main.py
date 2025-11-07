@@ -50,9 +50,14 @@ if __name__ == "__main__":
     # print(page_results)
 
     sr = Search(db)
-    res = sr.search("what is langgraph")
-    print("[DEBUG] Response after search\\n\n---------------\n\n")
-    print(res["answer"])
-    print("link :",res["url"])
 
-    print(res)
+    print("Hi, How can i help you? enter 'exit' for quit")
+    while True:
+        user_query = input("Enter your query:")
+        res = sr.search(user_query)
+        print("thinking..")
+        if user_query == "exit":
+            break
+
+        print(res["answer"])
+        print("link :", res["url"])

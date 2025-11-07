@@ -53,7 +53,7 @@ class Search:
         
         print(f"[DEBUG]: url extracted: {results}")
         page_results = self.vector_store.retrieve_page_content(query,url)
-        print(page_results,"jere")
+       
         if not page_results:
             print("[DEBUG]: Adding page to collection")
             data = self.loader.load_web_content(url[0])
