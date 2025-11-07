@@ -39,46 +39,37 @@ class Search:
         # Retrieve from user query
         results = self.vector_store.retrieve_main_content(query)
 
-        # print("RESULTS",results["metadatas"])
-        urls = results["metadatas"]
-        # urls =[]
+        try:
 
-        # For more than one url
-        # for n, metadata in enumerate(results["metadatas"]):
-        #     url = metadata
-        #     urls.append(url)
-        #     print(f"[DEBUG] adding url :{n}, {url}")
+            # print("RESULTS",results["metadatas"])
+            urls = results["metadatas"]
 
-        #     # data = self.loader.load_web_content(url)
-        #     # chunks = self.embedd.chunk_document(data)
-        #     # embedded_chunk = self.embedd.embedd_text(chunks["documents"])
-        #     # self.vector_store.add_page_content(chunks, embedded_chunk)
-
-        # # url  = results['metadatas'][0][0]["url"]
-
-        # print(f"[DEBUG]: url extracted: {results}")
-        page_results = self.vector_store.retrieve_page_content(query, urls)
-
-        if not page_results:
-
-            for url in urls:
-                # print("[DEBUG]: Adding page to collection")
-                data = self.loader.load_web_content(url['url'])
-                chunks = self.embedd.chunk_document(data)
-                embedded_chunk = self.embedd.embedd_text(chunks["documents"])
-                self.vector_store.add_page_content(chunks, embedded_chunk)
-
+            # print(f"[DEBUG]: url extracted: {results}")
             page_results = self.vector_store.retrieve_page_content(query, urls)
-            
-        if not results:
+
+            if not page_results:
+
+                for url in urls:
+                    # print("[DEBUG]: Adding page to collection")
+                    data = self.loader.load_web_content(url['url'])
+                    chunks = self.embedd.chunk_document(data)
+                    embedded_chunk = self.embedd.embedd_text(chunks["documents"])
+                    self.vector_store.add_page_content(chunks, embedded_chunk)
+
+                page_results = self.vector_store.retrieve_page_content(query, urls)
+
+
+            # print("Printting pafe result here\n\n\n",page_results)
+
+            docs = page_results.get("documents",[])
+
+        except Exception as e:
             return {"answer": "No relevant content found!", "url": ""}
 
-        # print("Printting pafe result here\n\n\n",page_results)
-
-        docs = page_results.get("documents",[])
 
         context: str = "\n\n".join(docs)
         # print(f"[DEBUG]:  Context extracted",context)
+
 
         if not context:
             return "No relevent content found!"
