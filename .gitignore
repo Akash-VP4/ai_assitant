@@ -10,3 +10,8 @@ wheels/
 .venv
 .env
 ai_assitant.ipynb
+db/09228c23-6012-4d9c-810c-c873f13dfd1f/length.bin
+db/9037d261-e9fb-429a-a56a-045092e183b4/length.bin
+db/chroma.sqlite3
+
+

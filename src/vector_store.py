@@ -36,7 +36,7 @@ class ChromaVectorStore:
             collection = self.client.get_or_create_collection(
                 name=collection_name, metadata={"description": "store web data"}
             )
-            print(f"[DEBUG]: collection created :{collection}")
+            # print(f"[DEBUG]: collection created :{collection}")
 
         except Exception as e:
             print(f"[DEBUG]: Failed to load store")
@@ -67,7 +67,7 @@ class ChromaVectorStore:
            query:
         """
         query_embedding = self.embedd.embedd_text([query])[0]
-        print(f"[DEBUG]: Embedded document in to {query_embedding.shape}")
+        # print(f"[DEBUG]: Embedded document in to {query_embedding.shape}")
 
         results = retrieve_document(query_embedding, self.collection_main)
 
@@ -79,16 +79,16 @@ class ChromaVectorStore:
             query:
         """
         query_embedding = self.embedd.embedd_text([query])[0]
-        print(f"[DEBUG]: Embedded document in to {query_embedding.shape}")
+        # print(f"[DEBUG]: Embedded document in to {query_embedding.shape}")
 
-        print("PRINT URL",url)
+        # print("PRINT URL",url)
 
         metadata = {
             # "url":{"$in":url}
             "url": url[0]
         }
         # metadata = None
-        print(metadata)
+        # print(metadata)
         results = retrieve_document(query_embedding, self.collection_page,n_results=3,metadata=metadata)
-        print(results)
+        # print(results)
         return results

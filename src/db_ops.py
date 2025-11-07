@@ -23,7 +23,7 @@ def add_document(document: list[Any], embeddings: np.array,collection):
             embeddings=embeddings,
             metadatas=document["metadatas"],
         )
-        print(f"[DEGUB]: Added {collection.count()} document to {collection}")
+        # print(f"[DEGUB]: Added {collection.count()} document to {collection}")
 
     except Exception as e:
         print(f"[ERORR]: Failed to add documents: {e}")
@@ -45,7 +45,7 @@ def retrieve_document(query_embedding:np.ndarray, collection, n_results = 1,meta
             n_results = n_results,
             where = metadata
         )
-        print(results)
+        # print(results)
         documents = results["documents"][0]
         distances = results["distances"][0]
         metadatas = results["metadatas"][0]
@@ -58,14 +58,14 @@ def retrieve_document(query_embedding:np.ndarray, collection, n_results = 1,meta
         for i,(doc, dist, metadata,id) in enumerate(zip(documents,distances,metadatas,ids)):
             similarity_score = 1-dist
 
-            print(similarity_score)
+            # print(similarity_score)
             if similarity_score>score_threshold:
                 retrieved_docs.append(doc)
                 retrived_metadtas.append(metadata["url"])
                 retrieved_ids.append(id)
-                print(f"[DEBUG]: Found matching context: {i}")
+                # print(f"[DEBUG]: Found matching context: {i}")
 
-        print("[DEBUG]: retrieving completed")
+        # print("[DEBUG]: retrieving completed")
 
         results = {
             "documents": retrieved_docs,
@@ -79,3 +79,5 @@ def retrieve_document(query_embedding:np.ndarray, collection, n_results = 1,meta
         print(f"[ERROR]: Failed to search: {e}")
 
     return []
+
+ 

@@ -21,7 +21,7 @@ class Embedding:
         """This will initialize model"""
         try:
             self.model = SentenceTransformer(self.model_name)
-            print("[DEBUG]: Embedding model loaded")
+            # print("[DEBUG]: Embedding model loaded")
 
         except Exception as e:
             print(f"[ERROR]: Failed to load embedding model{e}")
@@ -41,7 +41,7 @@ class Embedding:
         # print("[DEBUG]:TYPE OF DOC",  type(document))
 
         doc_chunks = text_splitter.split_documents(document)
-        print(f"[DEBUG]: Split document into {len(doc_chunks)}")
+        # print(f"[DEBUG]: Split document into {len(doc_chunks)}")
 
         documents = []
         metadatas = []
@@ -54,7 +54,7 @@ class Embedding:
 
         data = {"ids": ids, "documents": documents, "metadatas": metadatas}
 
-        print("[DEBUG]: Completed chunking") 
+        # print("[DEBUG]: Completed chunking") 
         return data
 
     def embedd_text(self,document_text:List[str]):
@@ -63,7 +63,7 @@ class Embedding:
           document:
         """
 
-        embeddings = self.model.encode(document_text,show_progress_bar=True)
-        print(f"[DEBUG]: Document embedded :{embeddings.shape}")
+        embeddings = self.model.encode(document_text,show_progress_bar=False)
+        # print(f"[DEBUG]: Document embedded :{embeddings.shape}")
 
         return embeddings

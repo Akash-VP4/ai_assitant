@@ -21,7 +21,7 @@ class load_web_text:
         try:
             data = requests.get(url)
             self.web_contents = data.text.splitlines()
-            print("[DEGUB]: Web data extracted")
+            # print("[DEGUB]: Web data extracted")
 
         except Exception as e:
             print(f"[ERROR]: Failed to fetch web data: {e}")
@@ -66,7 +66,7 @@ class load_web_text:
 
         try:
             data = requests.get(url).text
-            print(f"[DEBUG]: Loaded web content from {url}")
+            # print(f"[DEBUG]: Loaded web content from {url}")
 
         except Exception as e:
             print(f"[ERROR]: Failed to load {url}: Found {e}")
