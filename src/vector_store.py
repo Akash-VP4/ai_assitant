@@ -12,7 +12,7 @@ class ChromaVectorStore:
         self,
         embedding: Embedding = Embedding(),
         collection_main_name="web_data",
-        persistent_directory="./db",
+        persistent_directory="../db",
         collection_page_name="page_data",
     ):
 
@@ -73,7 +73,7 @@ class ChromaVectorStore:
 
         return results
 
-    def retrieve_page_content(self, query:str,url):
+    def retrieve_page_content(self, query:str,urls):
         """This will retrieve main document
         Args:
             query:
@@ -81,14 +81,14 @@ class ChromaVectorStore:
         query_embedding = self.embedd.embedd_text([query])[0]
         # print(f"[DEBUG]: Embedded document in to {query_embedding.shape}")
 
-        # print("PRINT URL",url)
+    
+        # For checking based on the url
 
-        metadata = {
-            # "url":{"$in":url}
-            "url": url[0]
-        }
+
         # metadata = None
         # print(metadata)
-        results = retrieve_document(query_embedding, self.collection_page,n_results=3,metadata=metadata)
+        metadata = {"url": {"$in": urls}}
+        results = retrieve_document(query_embedding, self.collection_page,
+                                n_results= len(urls), metadata=metadata)
         # print(results)
         return results

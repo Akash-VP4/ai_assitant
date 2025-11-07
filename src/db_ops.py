@@ -29,7 +29,7 @@ def add_document(document: list[Any], embeddings: np.array,collection):
         print(f"[ERORR]: Failed to add documents: {e}")
 
 
-def retrieve_document(query_embedding:np.ndarray, collection, n_results = 1,metadata = None, score_threshold:float= -0.01):
+def retrieve_document(query_embedding:np.ndarray, collection, n_results = 3,metadata = None, score_threshold:float= -0.01):
     """This will retrieve closest data from db
     Args:
         query:
@@ -40,12 +40,14 @@ def retrieve_document(query_embedding:np.ndarray, collection, n_results = 1,meta
     """
 
     try:
+        
         results = collection.query(
             query_embeddings = [query_embedding.tolist()],
             n_results = n_results,
-            where = metadata
+            # where = metadata
         )
-        # print(results)
+
+        # print("After querying..",results)
         documents = results["documents"][0]
         distances = results["distances"][0]
         metadatas = results["metadatas"][0]
@@ -68,9 +70,9 @@ def retrieve_document(query_embedding:np.ndarray, collection, n_results = 1,meta
         # print("[DEBUG]: retrieving completed")
 
         results = {
-            "documents": retrieved_docs,
-            "metadatas": retrived_metadtas,
-            "ids": retrieved_ids,
+            "documents": documents,
+            "metadatas": metadatas,
+            "ids": ids,
         }
 
         return results if len(retrieved_docs) > 0 else None
@@ -79,5 +81,3 @@ def retrieve_document(query_embedding:np.ndarray, collection, n_results = 1,meta
         print(f"[ERROR]: Failed to search: {e}")
 
     return []
-
- 

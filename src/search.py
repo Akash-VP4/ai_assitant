@@ -39,10 +39,8 @@ class Search:
         # Retrieve from user query
         results = self.vector_store.retrieve_main_content(query)
 
-        if not results:
-            return {"answer": "No relevant content found!", "url": ""}
         # print("RESULTS",results["metadatas"])
-        url = results["metadatas"]
+        urls = results["metadatas"]
         # urls =[]
 
         # For more than one url
@@ -59,21 +57,28 @@ class Search:
         # # url  = results['metadatas'][0][0]["url"]
 
         # print(f"[DEBUG]: url extracted: {results}")
-        page_results = self.vector_store.retrieve_page_content(query, url)
+        page_results = self.vector_store.retrieve_page_content(query, urls)
 
         if not page_results:
-            # print("[DEBUG]: Adding page to collection")
-            data = self.loader.load_web_content(url[0])
-            chunks = self.embedd.chunk_document(data)
-            embedded_chunk = self.embedd.embedd_text(chunks["documents"])
-            self.vector_store.add_page_content(chunks, embedded_chunk)
 
-            page_results = self.vector_store.retrieve_page_content(query, url)
+            for url in urls:
+                # print("[DEBUG]: Adding page to collection")
+                data = self.loader.load_web_content(url['url'])
+                chunks = self.embedd.chunk_document(data)
+                embedded_chunk = self.embedd.embedd_text(chunks["documents"])
+                self.vector_store.add_page_content(chunks, embedded_chunk)
 
-        context: str = (
-            "\n\n".join([doc for doc in page_results["documents"]]) if results else ""
-        )
-        # print(f"[DEBUG]:  Context extracted")
+            page_results = self.vector_store.retrieve_page_content(query, urls)
+            
+        if not results:
+            return {"answer": "No relevant content found!", "url": ""}
+
+        # print("Printting pafe result here\n\n\n",page_results)
+
+        docs = page_results.get("documents",[])
+
+        context: str = "\n\n".join(docs)
+        # print(f"[DEBUG]:  Context extracted",context)
 
         if not context:
             return "No relevent content found!"
@@ -84,5 +89,6 @@ class Search:
         """
 
         response = self.llm.invoke([prompt])
+        url = list(set(urls["url"][:-2] for urls in page_results["metadatas"]))
 
-        return {"answer": response.content, "url": url[0][:-2]}
+        return {"answer": response.content, "url": url}
