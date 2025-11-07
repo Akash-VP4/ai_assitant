@@ -17,12 +17,12 @@ if __name__ == "__main__":
     # db = ChromaVectorStore()
     # db.add_main_content(data,embedd)
 
-    print("db..")
+    # print("db..")
     db = ChromaVectorStore()
-    print("search..")
+    # print("search..")
     sr = Search(db)
 
-    print("starting loop")
+    # print("starting loop")
 
     print("Hi, How can i help you? enter 'exit' for quit")
     while True:
